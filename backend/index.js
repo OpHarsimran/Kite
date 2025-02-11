@@ -1,9 +1,10 @@
 require('dotenv').config();
 
-const {holdings, positions} = require('./initData/data');
+// const {holdings, positions} = require('./initData/data');
 
 const {HoldingsModel} = require('./Models/HoldingsModel')
 const {PositionsModel} = require('./Models/PositionsModel')
+const {OrdersModel} = require('./Models/OrdersModel')
 
 const express = require('express');
 const bodyParser = require('body-parser')
@@ -41,6 +42,23 @@ app.get('/allPositions',async (req,res)=>{
     const postion = await PositionsModel.find({});
     res.json(postion);
 });
+
+app.get('/allOrders',async (req,res)=>{
+    const postion = await OrdersModel.find({});
+    res.json(postion);
+});
+
+
+
+app.post('/newOrder',async (req,res)=>{
+    let newOrder = new OrdersModel({
+    name: req.body.name,
+    qty: req.body.qty,
+    price: req.body.price,
+    mode: req.body.mode,
+    })
+    await newOrder.save();
+})
 
 
 app.listen(port,()=>{
